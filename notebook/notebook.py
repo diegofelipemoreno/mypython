@@ -1,6 +1,8 @@
 import datetime
 import pdb
 
+#pdb.set_trace()
+
 # Store the next available id for all new notes
 last_id = 0
 
@@ -24,9 +26,6 @@ class Note:
            text. Return True if it matches, False otherwise.
            Search is case sensitive and matches both text and tags.'''
         return filter in self.memo or filter in self.tags
-
-    def match_by_id(self, filter):
-        return filter in self.id
 
 class Notebook:
     '''Represent a collection of notes that can be tagged,
@@ -56,7 +55,7 @@ class Notebook:
     def _find_note(self, note_id):
         '''Find the note from id'''
         for note in self.notes:
-            if note.id == note_id:
+            if int(note.id) == int(note_id):
                return note
         return None
 
@@ -68,12 +67,6 @@ class Notebook:
         '''Find the note from text'''
         return [note for note in self.notes if
                 note.match(filterText)]
-
-    def search_by_id(self, id):
-        '''Find the note from id'''
-        return [note for note in self.notes if
-                note.match_by_id(id)]
-
 
 
 #n1 = Note('first note')

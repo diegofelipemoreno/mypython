@@ -52,7 +52,6 @@ class Menu:
             print(len(notes))
         else:
             for note in self.notebook.notes:
-                print("mostro otras")
                 print(note.__dict__)
                 print("{0}: {1} {2} {3}".format(
                 note.id, note.tags, note.memo, note.creation_date))
@@ -66,32 +65,20 @@ class Menu:
             for note in found:
                 print("{0}: {1} {2} {3}".format(
                 note.id, note.tags, note.memo, note.creation_date))
-
-    def search_notes_for_id():
-        textToLook = input("Select the note id to modify ")
-        found = self.notebook.search_by_id(textToLook)
-        foundNote = {}
-        if len(found) == 0:
-            print("{0}: element is not on the notebook".format(textToLook))
-        else:
-            print(note, '----->')
             
     def add_notes(self):
         memo = input("Enter a memo: ")
         new_note = self.notebook.new_note(memo)
     
     def modify_notes(self):
+        if len(self.notebook.notes) == 0:
+            print("You have to add a note")
+            return
+
         self.show_all_notes()
-        self.search_notes_for_id()
-        '''
-        self.display_modify_note()
-        toModify = input("Enter what do you want to modify: ")
-        action = self.modifyChoices.get(toModify)
-        if action: 
-            action()
-        else:
-            print("{0} is not a valid choice".format(toModify))
-        '''
+        idNote = input("Select the note id to modify ")
+        newMemo = input("Enter memo to modify: ")
+        self.notebook.modify_memo(idNote, newMemo)
 
     def modify_note_memo(self, noteId):
         print('---->', self.notebook.id)
