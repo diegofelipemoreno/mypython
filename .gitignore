@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+.sass-cache
+.firebaserc
+.tmp
+.vscode
+.firebase
+dist/
+node_modules/
+**/.depcache.json
