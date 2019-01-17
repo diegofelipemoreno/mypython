@@ -20,6 +20,7 @@ class Apartment(Property):
 
     def display(self):
         super().display()
+        print()
         print(PROMPT_MESSAGE["apartment_details"])
         print(PROMPT_MESSAGE["laundry"], self.laundry)
         print(PROMPT_MESSAGE["balcony"], self.balcony)
@@ -33,7 +34,7 @@ class Apartment(Property):
             "laundry": laundry,
             "balcony": balcony
         })
-        print(parent_init, '-->')
+        #print(parent_init, '-->')
         
         return parent_init
 
@@ -50,7 +51,7 @@ PROMPT_MESSAGE = {
     "laundry": "laundry: "
 }
 
-myapartment = Apartment()
-myapartment.prompt_init()
+#myapartment = Apartment()
+#myapartment.prompt_init()
 #myapartment.display()
 #get_valid_input("what laundry?", ("coin", "ensuite", "none"))

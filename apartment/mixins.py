@@ -22,7 +22,7 @@ def get_valid_type_input(input_value, valid_type):
         return re.match(r"^([\s\d]+)$", response)
     
     def if_string():
-        return re.match(r"^\D+[a-zA-Z].\D$", response)
+        return re.match(r"^\D+[a-zA-Z]\D$", response)
 
     switcher = {
         "boolean": if_boolean,
@@ -31,16 +31,8 @@ def get_valid_type_input(input_value, valid_type):
     }
 
     if (valid_type in switcher):
-
         while (switcher[valid_type]() == None):
             response = input(input_value)
         return response
     else:
         raise Exception("Invalid type value, valid type (string, number, boolean)")
-    
-
-def match(self, filter):
-    '''Determine if this note matches the filter
-        text. Return True if it matches, False otherwise.
-        Search is case sensitive and matches both text and tags.'''
-    return filter in self.memo or filter in self.tags
