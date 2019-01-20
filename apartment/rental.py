@@ -26,7 +26,7 @@ class Rental():
     
     def prompt_init():
         return dict(furnished = get_valid_custom_input(PROMPT_MESSAGE["furnished"], ("yes", "no")),
-                utilities = get_valid_type_input(PROMPT_MESSAGE["utilities"], "number"),
+                utilities = get_valid_type_input(PROMPT_MESSAGE["utilities"], "numbers"),
                 rent = get_valid_type_input(PROMPT_MESSAGE["rent"], "number"))
     
     #is ready to be called for initialize this class from a child Class

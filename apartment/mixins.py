@@ -1,4 +1,5 @@
-import re, pdb
+import re, pdb, sys
+from exceptions import InvalidTypeValue
 
 #pdb.set_trace()
 
@@ -24,15 +25,15 @@ def get_valid_type_input(input_value, valid_type):
     def if_string():
         return re.match(r"^\D+[a-zA-Z]\D$", response)
 
-    switcher = {
+    type_dict = {
         "boolean": if_boolean,
         "number": if_number,
         "string": if_string
     }
 
-    if (valid_type in switcher):
-        while (switcher[valid_type]() == None):
+    try:
+        while (type_dict[valid_type]() == None):
             response = input(input_value)
         return response
-    else:
-        raise Exception("Invalid type value, valid type (string, number, boolean)")
+    except KeyError as exception:
+        raise InvalidTypeValue("\n {} is not part of type_dict: \n\t -boolean \n\t -number \n\t -string".format(exception))
