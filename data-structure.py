@@ -3,6 +3,7 @@ import datetime
 from collections import namedtuple
 from collections import defaultdict
 import string
+from collections import KeysView, ItemsView, ValuesView
 
 # Object
 o = object()
@@ -174,3 +175,109 @@ l.sort(key=str.lower)
 
 # -------------------------- SETS -----------------------------
 
+song_library = [("Phantom Of The Opera", "Sarah Brightman"),
+ ("Knocking On Heaven's Door", "Guns N' Roses"),
+ ("Captain Nemo", "Sarah Brightman"),
+ ("Patterns In The Ivy", "Opeth"),
+ ("November Rain", "Guns N' Roses"),
+ ("Beautiful", "Sarah Brightman"),
+ ("Mal's Song", "Vixy and Tony")]
+
+artists = set()
+for song, artist in song_library:
+    artists.add(artist)
+
+print(artists)
+print(">>>>>>>>>>>>>")
+
+for artist in artists:
+    print("{} plays good music".format(artist))
+
+print(">>>>>>>>>>>>>")
+
+alphabetical = list(artists)
+alphabetical.sort()
+print(alphabetical)
+
+print(">>>>>>>>>>>>>")
+
+my_artists = {"Sarah Brightman", "Guns N' Roses",
+ "Opeth", "Vixy and Tony"}
+auburns_artists = {"Nickelback", "Guns N' Roses",
+ "Savage Garden"}
+
+print("All (UNION): {}".format(my_artists.union(auburns_artists)))
+print("Both (intersection): {}".format(my_artists.intersection(auburns_artists)))
+print("Either but not both: {}".format(my_artists.symmetric_difference(auburns_artists)))
+
+print(">>>>>>>>>>>>>")
+
+my_artists = {"Sarah Brightman", "Guns N' Roses",
+ "Opeth", "Vixy and Tony"}
+bands = {"Guns N' Roses", "Opeth"}
+
+print("my_artists is to bands:")
+print("issuperset: {}".format(my_artists.issuperset(bands)))
+print("issubset: {}".format(my_artists.issuperset(bands)))
+print("difference: {}".format(my_artists.issuperset(bands)))
+print("*"*20)
+print("bands is to my_artists:")
+print("issuperset: {}".format(bands.issuperset(my_artists)))
+print("issubset: {}".format(bands.issubset(my_artists)))
+print("difference: {}".format(bands.difference(my_artists)))
+
+# CHECK OBJECT PRIVATE METHODS
+print(dir(list))
+
+# HELP OBJECT METHOD HOW TO WORKS
+#help(list.__add__)
+
+# Sorted dictionary
+
+class DictSorted(dict):
+    def __new__(*args, **kwargs):
+        new_dict = dict.__new__(*args, **kwargs)
+        new_dict.ordered_keys = []
+        return new_dict
+
+    def __setitem__(self, key, value):
+        ''' self[key] = value syntax'''
+        if key not in self.ordered_keys:
+            self.ordered_keys.append(key)
+        super().__setitem__(key, value)
+
+    def setdefault(self, key, value):
+        if key not in self.ordered_keys:
+            self.ordered_keys.append(key)
+        return super().setdefault(key, value)
+
+    def keys(self):
+        return KeysView(self)
+
+    def values(self):
+        return ValuesView(self)
+    
+    def items(self):
+        return ItemsView(self)
+    
+    def __iter__(self):
+        ''' for x in self syntax '''
+        return self.ordered_keys.__iter__()
+
+print(">"*30)  
+ds = DictSorted()
+d = {}
+
+ds['b'] = 2
+ds['a'] = 1
+ds.setdefault('c', 3)
+
+d['b'] = 2
+d['a'] = 1
+d.setdefault('c', 3)
+
+print(ds)
+print(d)
+
+for key, value in ds.items():
+    print(key, value)
