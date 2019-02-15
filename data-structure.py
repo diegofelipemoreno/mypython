@@ -167,7 +167,7 @@ x.sort()
 print(x)
 x.sort(key=lambda i: i[1])
 print(x)
-print(">>>>>>>>>>>>>")
+print(">>>>>iiii>>>>>>")
 l = ["hello", "HELP", "Helo"]
 l.sort()
 l.sort(key=str.lower)
