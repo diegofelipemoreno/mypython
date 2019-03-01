@@ -36,6 +36,7 @@ for index, line in enumerate(normal_list_letters):
 
 print("*"*30)
 # --------  ZIP ----------- (2 more squences creates a tuple)
+'''
 contacts = []
 with open(filename) as file:
     header = file.readline().strip().split('\t')
@@ -88,8 +89,10 @@ input_strings = ['1', '5', '28', '131', '3']
 output_intergers = []
 
 '''
+'''
 for num in input_strings:
     output_intergers.append(int(num))
+'''
 '''
 
 output_intergers = [int(num) for num in input_strings]
@@ -109,3 +112,44 @@ print(contacts)
 
 
 # ----------- Set and dictionary comprehensions -----------------
+print("x"*30)
+
+from collections import namedtuple
+
+Book = namedtuple("Book", "author title genre")
+books = [
+ Book("Pratchett", "Nightwatch", "fantasy"),
+ Book("Pratchett", "Thief Of Time", "fantasy"),
+ Book("Le Guin", "The Dispossessed", "scifi"),
+ Book("Le Guin", "A Wizard Of Earthsea", "fantasy"),
+ Book("Turner", "The Thief", "fantasy"),
+ Book("Phillips", "Preston Diamond", "western"),
+ Book("Phillips", "Twice Upon A Time", "scifi")
+]
+
+fantasy_authors = {
+    b.author for b in books if b.genre == 'fantasy'
+}
+
+fantasy_title = {
+    b.title: b for b in books if b.genre == 'fantasy'
+}
+
+print(fantasy_title)
+'''
+# ----------- Generator expressions ----------------- 
+# looping over items without final conatiner in order to save system memory
+print("-"*30)
+
+inname = sys.argv[1]
+outname = sys.argv[2]
+warnings = ()
+
+with open(inname) as infile:
+    with open(outname, "w") as outfile:
+            for l in infile:
+                if 'WARNING' in l:
+                    warnings = (l)
+
+                    for l in warnings:
+                        outfile.write(l)
