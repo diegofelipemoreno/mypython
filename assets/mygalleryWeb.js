@@ -12,7 +12,7 @@ import * as utils from '../../../../utils/utils.js';
 import * as galleryWebView from '../view/galleryWebView.js';
 
 /**
- * Gallery Web Component
+ * gallery Web Component
  */
 export class GalleryWebComponent extends BaseComponent {
   /**
@@ -108,7 +108,7 @@ export class GalleryWebComponent extends BaseComponent {
   }
 
   /**
-   * Sets cover on leave animation
+   * sets cover on leave animation
    */
   setCoverAnimation() {
     const coverBkSelector
@@ -513,6 +513,38 @@ const Variables = {
 /**
  * Data content Attributes
  * @enum {string} Data content Attributes and more
+ */
+export const DataContentAttr = {
+  PREFIX_CONTENT_KEY: 'actions-content-'
+};
+
+/**
+ * Data content Attributes
+ * @param {String}
+ */
+export const DataContentAttr = {
+  PREFIX_CONTENT_KEY: 'actions-content-'
+};
+
+/**
+ *  sata content   attributes
+ * @enum {Boolean} this is  a text
+ */
+export const DataContentAttr = {
+  PREFIX_CONTENT_KEY: 'actions-content-'
+};
+
+/**
+ * Data content Attributes
+ * @param {!String=}
+ */
+export const DataContentAttr = {
+  PREFIX_CONTENT_KEY: 'actions-content-'
+};
+
+/**
+ * Data content Attributes
+ * @param {Boolean=}
  */
 export const DataContentAttr = {
   PREFIX_CONTENT_KEY: 'actions-content-'

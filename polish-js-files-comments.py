@@ -7,8 +7,8 @@ import sys
 DOT_CHAR = "."
 JSDOC_DOUBLE_SPACE_REGEXP = "^(^\s{1,}\*).+\s{2,}"
 JSDOC_FULL_TITLE_REGEXP = "^\s{1,}\*\s{1,}(?:[a-zA-Z]{1,}\s{1,})+.{1,}"
+JSDOC_PARAM_REGEX_TYPE_PARAM = "^\s{1,}\*.\@.+\s{1,}\{.+\}"
 JSDOC_NO_PARAM_REGEXP = "^\s{1,}\*.\@.[enum|retun].+\s{1,}\{.[a-zA-Z].+\}\s{1,}[a-zA-Z]"
-JSDOC_PARAM_REGEX = "^\s{1,}\*.\@.[a-z].+\s{1,}\{"
 JSDOC_PARAM_TEXT_REGEX = "^\s{1,}\*.\@.[param].+\s{1,}\{.[a-zA-Z].+\}\s{1,}[a-zA-Z]+\s{1,}"
 JSDOC_TITLE_REGEXP = "^\s{1,}\*.[a-zA-Z]"
 LIMIT_LINE_COL = 75
@@ -88,6 +88,43 @@ class PolishJSFileComments:
                 self.list_fixes.append((line[0], line_fixed))
 
             self.write_fixed_lines_on_file()
+    
+    def _fix_jsdoc_capitalize_type_param(self, regexp):
+        """
+        Sets on list_fixes, letter capitalize on the correct type params values.
+
+        Args:
+        String: regexp Pattern to match.
+        """
+
+        self.list_fixes = []
+        line_fixed = ""
+        word_list_expection = ["string", "boolean"]
+
+        for line in self.set_list_line_filtered(regexp):
+            word_on_regex = re.findall(regexp, line[0])
+            prefix_regexp = ""
+            suffix_regexp = ""
+
+            if word_on_regex:
+                prefix_regexp = re.split("{", word_on_regex[0])[0]
+                suffix_regexp = re.split("}", word_on_regex[0])[1] or ""
+                parameter_type_word = re.split("{", word_on_regex[0])[1]
+                parameter_type_word = re.split("}", parameter_type_word)[0]
+                parameter_type_word_filtered = parameter_type_word.replace("!", "")
+                parameter_type_word_filtered = parameter_type_word_filtered.replace("=", "")
+                parameter_type_word_to_replace = "{" + parameter_type_word + "}"
+                parameter_fixed = ""
+ 
+                if parameter_type_word_filtered.lower() in word_list_expection:
+                    parameter_fixed = word_on_regex[0].replace(parameter_type_word_to_replace, parameter_type_word_to_replace.lower())
+                else:
+                    parameter_fixed = word_on_regex[0].replace(parameter_type_word_to_replace, parameter_type_word_to_replace.title())
+                
+                line_fixed = line[0].replace(word_on_regex[0], parameter_fixed)
+                self.list_fixes.append((line[0], line_fixed))
+                
+        self.write_fixed_lines_on_file()
 
     def _fix_jsdoc_text_dot(self, regexp):
         """
@@ -226,31 +263,13 @@ class PolishJSFileComments:
         """
         Triggers fixes actions.
         """
+        self._fix_jsdoc_capitalize_type_param(JSDOC_PARAM_REGEX_TYPE_PARAM)
         self._fix_double_space_on_jsdoc(JSDOC_DOUBLE_SPACE_REGEXP)
-        self._fix_jsdoc_capitalize(JSDOC_PARAM_REGEX)
         self._fix_jsdoc_capitalize(JSDOC_PARAM_TEXT_REGEX)
         self._fix_jsdoc_no_param_capitalize(JSDOC_NO_PARAM_REGEXP)
         self._fix_jsdoc_no_param_capitalize(JSDOC_TITLE_REGEXP)
-        
-        
-        
-        
-        
-        
         self._fix_jsdoc_text_dot(JSDOC_NO_PARAM_REGEXP)
-        
-        
-        
-        
-        
-        
         self._fix_jsdoc_text_dot(JSDOC_PARAM_TEXT_REGEX)
-        
-        
-        
-        
-        
-        
         self._fix_jsdoc_title_text_dot(JSDOC_FULL_TITLE_REGEXP)
 
 if __name__ == "__main__":
