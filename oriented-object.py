@@ -138,7 +138,7 @@ fantasy_title = {
 print(fantasy_title)
 '''
 # ----------- Generator expressions ----------------- 
-# looping over items without final conatiner in order to save system memory
+# looping over items without final container in order to save system memory
 print("-"*30)
 
 inname = sys.argv[1]
