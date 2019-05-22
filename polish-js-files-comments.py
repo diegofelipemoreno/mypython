@@ -3,6 +3,7 @@ import os
 import pdb
 import re
 import sys
+import time
 
 DOT_CHAR = "."
 JSDOC_DOUBLE_SPACE_REGEXP = "^(^\s{1,}\*).+\s{2,}"
@@ -11,7 +12,7 @@ JSDOC_PARAM_REGEX_TYPE_PARAM = "^\s{1,}\*.\@.+\s{1,}\{.+\}"
 JSDOC_NO_PARAM_REGEXP = "^\s{1,}\*.\@.[enum|retun].+\s{1,}\{.[a-zA-Z].+\}\s{1,}[a-zA-Z]"
 JSDOC_PARAM_TEXT_REGEX = "^\s{1,}\*.\@.[param].+\s{1,}\{.[a-zA-Z].+\}\s{1,}[a-zA-Z]+\s{1,}"
 JSDOC_TITLE_REGEXP = "^\s{1,}\*.[a-zA-Z]"
-LIMIT_LINE_COL = 75
+LIMIT_LINE_COL = 72
 NULLABLE_CHAR = "!"
 PARSER_CHAR = "{---}"
 SPACE_LINE_CHAR = "\n"
@@ -99,7 +100,7 @@ class PolishJSFileComments:
 
         self.list_fixes = []
         line_fixed = ""
-        word_list_expection = ["string", "boolean"]
+        word_list_expection = ["string", "boolean", "void"]
 
         for line in self.set_list_line_filtered(regexp):
             word_on_regex = re.findall(regexp, line[0])
@@ -138,6 +139,11 @@ class PolishJSFileComments:
         line_fixed = ""
         line_partial_fixed = ""
         regex = re.compile(r"[\n\r\t]")
+        set_line_partial_fixed = set()
+        set_line_fixed = set()
+        my_set = set()
+
+        #print(self.set_list_line_filtered(regexp))
         
         for line in self.set_list_line_filtered(regexp):
             word_on_regex = re.findall(regexp, line[0])
@@ -153,6 +159,7 @@ class PolishJSFileComments:
                 line_partial_fixed = regex.sub("", line[0])
                 line_fixed = prefix_word + suffix_word
                 self.list_fixes.append((line_partial_fixed, line_fixed))
+                my_set.add((line_partial_fixed, line_fixed))
 
         self.write_fixed_lines_on_file()
 
@@ -234,17 +241,18 @@ class PolishJSFileComments:
         Return:
         List file line filtered according regex.
         """
-
-        list_line_filtered = []
+        dict_line_filtered = {}
+        #list_line_filtered = []
         with open(self.file_path, 'r') as file:
             for index, line in enumerate(file):
                 if (self._matches(regexp, line)):
-                    list_line_filtered.append((line, index))
+                    dict_line_filtered[line] = index
+                    #list_line_filtered.append((line, index))
                     
                     if len(line) >= LIMIT_LINE_COL:
                         self.set_line_index.add(index)
 
-        return list_line_filtered
+        return dict_line_filtered.items()
     
     def write_fixed_lines_on_file(self):
         """Edits the file with the fixed lines.
