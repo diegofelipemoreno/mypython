@@ -3,7 +3,6 @@ import os
 import pdb
 import re
 import sys
-import time
 
 DOT_CHAR = "."
 JSDOC_DOUBLE_SPACE_REGEXP = "^(^\s{1,}\*).+\s{2,}"
