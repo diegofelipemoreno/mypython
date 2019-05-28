@@ -2,10 +2,6 @@ import smtplib
 from email.mime.text import MIMEText
 from collections import defaultdict
 
-#send_email("A model subject", "The message contents", "from@example.com", "to1@example.com", "to2@example.com", "to3@example.com")
-
-##  whenever you need a dictionary, and each element’s value should start with a default value, use a defaultdict.
-
 class MailingList:
     '''Manage groups of e-mail addresses for sending e-mails.'''
 
@@ -48,7 +44,7 @@ class MailingList:
 
 
 mailing_list = MailingList()
-mailing_list.add_to_group("to1@example.com", "office")
+mailing_list.add_to_group("diegofelipe.moreno@gmail.com", "office")
 mailing_list.add_to_group("to2@example.com", "home")
 mailing_list.add_to_group("to3@example.com", "home")
 mailing_list.add_to_group("to4@example.com", "friends")

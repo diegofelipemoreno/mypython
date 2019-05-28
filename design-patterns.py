@@ -386,6 +386,15 @@ class EmailFacade:
         self.password = password
 
     def send_email(self, to_email, subject, message):
+        ''' 
+            Sends Email with subject, message
+
+            Args:
+            String: valid email.
+            String: subject.
+            String: message.
+        '''
+
         if not "@" in username:
             from_email = "{0}@{1}".format(self.username, self.host)
         else:
