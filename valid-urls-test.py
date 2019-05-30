@@ -1,9 +1,5 @@
-import urllib2
-import smtplib, ssl
+import urllib.request
 import pdb
-import sys
-from time import sleep
-
 
 class CheckErrorCodesUrls:
     def __init__(self, list_urls):
@@ -15,14 +11,14 @@ class CheckErrorCodesUrls:
             Sets error codes dictionary from url list.
         """
         for index, url in enumerate(self.list_urls):
-            req = urllib2.Request(url)
+            req = urllib.request.Request(url)
             self.progress_msg(index, url)
 
             try:
-                urllib2.urlopen(req)
-            except urllib2.HTTPError as e:
+                urllib.request.urlopen(req)
+            except urllib.request.HTTPError as e:
                 status_code = e.code
-                if status_code in self.dict_status_urls:
+                if status_code in self.dict_sbogota2018tatus_urls:
                     self.dict_status_urls[status_code].append(url)
                 else:
                     self.dict_status_urls[status_code] = [url]

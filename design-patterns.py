@@ -424,4 +424,175 @@ class EmailFacade:
 print("-"*30)
 
 # --------- Abstract factory pattern --------------
+'''
+The abstract factory pattern is normally used when we have multiple possible
+implementations of a system that depend on some configuration or platform issue.
+The calling code requests an object from the abstract factory, not knowing exactly
+what class of object will be returned.
+'''
+
+class FranceDateFormatter:
+    def format_date(self, y, m, d):
+        y, m, d = (str(x) for x in (y,m,d))
+        y = "20" + y if len(y) == 2 else y
+        m = "0" + m if len(m) == 2 else m
+        d = "0" + d if len(d) == 1 else d
+        print("{0}/{1}/{2}".format(d,m,y))
+        return ("{0}/{1}/{2}".format(d,m,y))
+
+
+class USADateFormatter:
+    def format_date(self, y, m, d):
+        y, m, d = (str(x) for x in (y,m,d))
+        y = '20' + y if len(y) == 2 else y
+        m = '0' + m if len(m) == 1 else m
+        d = '0' + d if len(d) == 1 else d
+        print("{0}-{1}-{2}".format(m,d,y))
+        return("{0}-{1}-{2}".format(m,d,y))
+
+
+class FranceCurrencyFormatter:
+    def format_currency(self, base, cents):
+        base, cents = (str(x) for x in (base, cents))
+
+        if len(cents) == 0:
+            cents = '00'
+        elif len(cents) == 1:
+            cents = '0' + cents
+
+        digits = []
+        for i,c in enumerate(reversed(base)):
+            if i and not i % 3:
+                digits.append(' ')
+            digits.append(c)
+        base = ''.join(reversed(digits))
+        return "{0}€{1}".format(base, cents)
+
+
+class USACurrencyFormatter:
+    def format_currency(self, base, cents):
+        base, cents = (str(x) for x in (base, cents))
+
+        if len(cents) == 0:
+            cents = '00'
+        elif len(cents) == 1:
+            cents = '0' + cents
+        
+        digits = []
+        for i,c in enumerate(reversed(base)):
+            if i and not i % 3:
+                digits.append(',')
+            digits.append(c)
+        base = ''.join(reversed(digits))
+
+        return "${0}.{1}".format(base, cents)
+
+class USAFormatterFactory:
+    def create_date_formatter(self):
+        return USADateFormatter()
+    def create_currency_formatter(self):
+        return USACurrencyFormatter()
+
+class FranceFormatterFactory:
+    def create_date_formatter(self):
+        return FranceDateFormatter()
+    def create_currency_formatter(self):
+        return FranceCurrencyFormatter()
+
+country_code = "FR"
+factory_map = {
+    "US": USAFormatterFactory,
+    "FR": FranceFormatterFactory
+    }
+formatter_factory = factory_map.get(country_code)()
+formatter_factory.create_date_formatter().format_date(1984,9,24)
+
+print("-"*30)
+
+
+# --------- Composite pattern --------------
+
+class Folder:
+    def __init__(self, name):
+        self.name = name
+        self.children = {}
+
+    def add_child(self, child):
+        child.parent = self
+        self.children[child.name] = child
+
+    def move(self, new_path):
+        pass
+    
+    def copy(self, new_path):
+        pass
+
+    def delete(self):
+        pass
+
+class File:
+    def __init__(self, name, contents):
+        self.name = name
+        self.contents = contents
+    
+    def move(self, new_path):
+        pass
+
+    def copy(self, new_path):
+        pass
+
+    def delete(self):
+        pass
+
+class Component:
+    def __init__(self, name):
+        self.name = name
+
+    def move(self, new_path):
+        new_folder = get_path(new_path)
+        del self.parent.children[self.name]
+        new_folder.children[self.name] = self
+        self.parent =  new_folder
+
+    def delete(self):
+        del self.parent.children[self.name]
+
+
+class Folder(Component):
+    def __init__(self, name):
+        super().__init__(name)
+        self.children = {}
+
+    def add_child(self, child):
+        pass
+
+    def copy(self, new_path):
+        pass
+
+
+class File(Component):
+    def __init__(self, name, contents):
+        super().__init__(name)
+        self.contents = contents
+
+    def copy(self, new_path):
+        pass
+
+
+root = Folder("")
+def get_path(path):
+    names = path.split("/")[1:]
+    node = root
+    for name in names:
+        node = node.children[name]
+    return node
+
+folder1 = Folder("folder1")
+folder2 = Folder("folder2")
+root.add_child(folder1)
+root.add_child(folder2)
+folder11 = Folder("folder11")
+folder1.add_child(folder11)
+
+print(root.__dict__)
 
