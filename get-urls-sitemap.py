@@ -22,12 +22,24 @@ class GetUrlSitemap:
         with open(self.file, "r") as file:
             for line in file:
 
-                if "<loc>" in line and not self._has_link_intl(line):
+                if "https://" in line and self._has_link_intl(line):
                     current_line = line.rstrip("\n")
-                    line_cleaned = self._clear_tag_string(current_line)
+                    #split_href_attr = current_line.split("https://")[1]
+                    if current_line.split("https://")[1]:
+                        line_cleaned = self._clear_tag_string(current_line.split("https://")[1])
+                        #print(current_line.split("https://")[1])
+                        print(line_cleaned)
                     line_list.append(line_cleaned)
     
         return line_list
+
+    def output_result(self, list_urls):
+        outname = "./assets/get-urls-sitemap-results.txt"
+
+        with open(outname, "w") as outfile:
+                for url in list_urls:
+                    outfile.write("'" + url + "',\r\n")
+
 
     def _has_link_intl(self, tag_string):
         """Filter if link has intl path.
@@ -50,7 +62,8 @@ class GetUrlSitemap:
         Returns:
         String: Tag content.
         """
-        clean = re.compile("<.*?>")
+        #clean = re.compile(".?>")
+        clean = re.compile('.?>|\"|.?/>|</.+')
         text = re.sub(clean, "", tag_string)
 
         return text
@@ -65,7 +78,9 @@ class GetUrlSitemap:
         print(dom)
 
     def process(self):
-       self.find_element_on_urls(["http://www.android.com"])
+       #self.find_element_on_urls(["http://www.android.com"])
+       result_list = self.sitemap_line_list
+       self.output_result(result_list)
 
 
 if __name__ == "__main__":
