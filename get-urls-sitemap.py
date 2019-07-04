@@ -34,7 +34,15 @@ class GetUrlSitemap:
         return line_list
 
     def output_result(self, list_urls):
-        outname = "./assets/get-urls-sitemap-results.txt"
+        """ Outputs results on a txt file.
+
+        Args:
+           list: List elements provided.
+
+        Returns:
+            Txt file.
+        """
+        outname = "./assets/get-urls-sitemap-results-intl.txt"
 
         with open(outname, "w") as outfile:
                 for url in list_urls:
