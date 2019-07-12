@@ -549,3 +549,11 @@ export const DataContentAttr = {
 export const DataContentAttr = {
   PREFIX_CONTENT_KEY: 'actions-content-'
 };
+
+/**
+ * Data content Attributes
+ * @param {!array=}
+ */
+export const DataContentAttr = {
+  PREFIX_CONTENT_KEY: 'actions-content-'
+};
