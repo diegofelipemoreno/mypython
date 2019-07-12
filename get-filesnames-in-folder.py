@@ -26,7 +26,7 @@ class GetFilenamesInFolder:
         Returns:
             Txt file.
         """
-        outname = "./assets/filenames-imgs-filtered.txt"
+        outname = "./assets/filenames-imgs-all.txt"
 
         with open(outname, "w") as outfile:
                 for filename_text in self.filename_set:
