@@ -10,7 +10,7 @@ JSDOC_FULL_TITLE_REGEXP = "^\s{1,}\*\s{1,}(?:[a-zA-Z]{1,}\s{1,})+.{1,}"
 JSDOC_PARAM_REGEX_TYPE_PARAM = "^\s{1,}\*.\@.+\s{1,}\{.+\}"
 JSDOC_NO_PARAM_REGEXP = "^\s{1,}\*.\@.[enum|retun].+\s{1,}\{.[a-zA-Z].+\}\s{1,}[a-zA-Z]"
 JSDOC_PARAM_TEXT_REGEX = "^\s{1,}\*.\@.[param].+\s{1,}\{.[a-zA-Z].+\}\s{1,}[a-zA-Z]+\s{1,}"
-JSDOC_TITLE_REGEXP = "^\s{1,}\*.[a-zA-Z]"
+JSDOC_TITLE_REGEXP = "^\s{1}\*.[a-zA-Z]"
 LIMIT_LINE_COL = 72
 NULLABLE_CHAR = "!"
 PARSER_CHAR = "{---}"
@@ -99,7 +99,7 @@ class PolishJSFileComments:
 
         self.list_fixes = []
         line_fixed = ""
-        word_list_expection = ["string", "boolean", "void"]
+        word_list_expection = ["string", "boolean", "void", "number", "HTMLElement"]
 
         for line in self.set_list_line_filtered(regexp):
             word_on_regex = re.findall(regexp, line[0])
@@ -277,6 +277,7 @@ class PolishJSFileComments:
         self._fix_jsdoc_no_param_capitalize(JSDOC_NO_PARAM_REGEXP)
         self._fix_jsdoc_no_param_capitalize(JSDOC_TITLE_REGEXP)
         self._fix_jsdoc_text_dot(JSDOC_NO_PARAM_REGEXP)
+        self._fix_jsdoc_text_dot(JSDOC_TITLE_REGEXP)
         self._fix_jsdoc_text_dot(JSDOC_PARAM_TEXT_REGEX)
         self._fix_jsdoc_title_text_dot(JSDOC_FULL_TITLE_REGEXP)
 
