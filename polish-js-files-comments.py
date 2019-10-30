@@ -115,14 +115,14 @@ class PolishJSFileComments:
                 parameter_type_word_filtered = parameter_type_word_filtered.replace("=", "")
                 parameter_type_word_to_replace = "{" + parameter_type_word + "}"
                 parameter_fixed = ""
- 
+        
                 if parameter_type_word_filtered.lower() in word_list_expection:
                     parameter_fixed = word_on_regex[0].replace(parameter_type_word_to_replace, parameter_type_word_to_replace.lower())
                 else:
-                    parameter_type_word_to_replace = parameter_type_word_to_replace.title()
                     parameter_fixed = word_on_regex[0].replace(parameter_type_word_to_replace, parameter_type_word_to_replace.title())
                 
                 line_fixed = line[0].replace(word_on_regex[0], parameter_fixed)
+                #print(line[0], line_fixed)
                 self.list_fixes.append((line[0], line_fixed))
                 
         self.write_fixed_lines_on_file()
