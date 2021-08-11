@@ -552,7 +552,7 @@ print("-"*30)
 
 # PROXY PATTERN
 # Provides a placeholder to get access to that object. So you instead the Object directly
-# you call the Proxy to get CONTROL ACCES to the object.
+# you call the Proxy to get CONTROL ACCESS to the object.
 
 # This example it supposed to fix the performance in a APP. Is just theorical.
 
@@ -580,4 +580,175 @@ book = "Provides a placeholder to get access to that object. So you instead the 
 parser_proxy = BookParserProxy(book)
 
 print(parser_proxy.get_number_pages())
+print("-"*30)
 
+'''
+Abstract Class
+An abstract class is a class that is declared abstract — it may or may not include abstract methods.
+Abstract classes cannot be instantiated, but they can be subclassed.
+An abstract class may have static fields and static methods.
+
+Interface
+An interface is just the declaration of methods of an object; it’s not the implementation.
+In an interface, we define what kind of operation an object can perform.
+These operations are defined by the classes that implement the interface. 
+Interfaces form a contract between the class and the outside world, 
+and this contract is enforced at build time by the compiler.
+
+interface Vehicle {
+  // Declaration
+  void changeGear(int newValue)
+}
+
+class Car implements Vehicle {
+  int gear = 0
+  // Implementation
+  void changeGear(int newValue) {
+    gear =  newValue
+  }
+}
+
+'''
+
+# Bridge PATTERN
+# Separates the specific (MediaResource) Classess from the independent one (LongTermView).
+# The result is less classes to make.
+
+class LongTermView:
+  def __init__(self, resource):
+    self.resource = resource
+
+  def show(self):
+    content = self.resource.get_snippet()
+    image = self.resource.get_image()
+
+    return '<h1>{}</h1> <img src="{}">'.format(content, image)
+
+class ShortTermView:
+  def __init__(self, resource):
+    self.resource = resource
+
+  def show(self):
+    content = self.resource.get_snippet()
+
+    return '<h1>{}</h1>'.format(content)
+
+class MediaResource(ABC):
+  @abstractmethod
+  def get_snippet(self):
+    pass
+
+  @abstractmethod
+  def get_image(self):
+    pass
+
+class ArtistResource(MediaResource):
+  def __init__(self):
+    self.name = 'The artist''s name'
+    self.bio = 'The artist''s bio'
+    self.content = 'The artist''s tons of content'
+    self.image = 'The artist''s photo'
+
+  def get_snippet(self):
+    return self.name + self.bio + self.content
+
+  def get_image(self):
+    return self.image
+
+class BookResource(MediaResource):
+  def __init__(self):
+    self.title = 'The album name'
+    self.cover = 'The album cover'
+
+  def get_snippet(self):
+    return self.title
+
+  def get_image(self):
+    return self.cover
+
+
+book_media = BookResource()
+artist_media = ArtistResource()
+
+book_long_term_view = LongTermView(book_media)
+book_short_term_view = ShortTermView(book_media)
+
+artist_long_term_view = LongTermView(artist_media)
+artist_short_term_view = ShortTermView(artist_media)
+
+
+print(book_long_term_view.show())
+print(book_short_term_view.show())
+print(artist_long_term_view.show())
+print(artist_short_term_view.show())
+
+
+# Factory PATTERN
+# It takes charge to instance new object from the same family, in different ways and/or different subtypes.
+
+'''
+  Create factory Class -> Creator Class that creates a product a this products implements a specific product.
+  The products created have to have a relationship between them.
+  Example APP with dark and light theme, the factory makes sure to send correct group of buttons and labels (both
+  have consequence relationship between them) instances for each theme.
+'''
+
+
+# Abstract Factory PATTERN
+# Is a set of factory methods.
+
+print("-"*30)
+
+
+# COMPOSITE PATTERN
+# Composes objects into tree structure to represent part or full high hierarchies. The clients threads objects or hierarchies objects in an uniform way.
+
+class Component:
+  def __init__(self, name):
+    self.name = name
+
+  def move(self, new_path):
+    new_folder = get_path(new_path)
+    del self.parent.childrem[self.name]
+    new_folder.children[self.name] = self
+    self.parent = new_folder
+
+  def copy(self, new_path):
+    copy_name = self.name + '-copy'
+    new_folder = get_path(new_path)
+    new_folder.children[copy_name] = self
+    self.parent = new_folder
+
+  def delete():
+    del self.parent.children[self.name]
+
+class Folder(Component):
+  def __init__(self, name):
+    super().__init__(name)
+    self.children = {}
+
+  def add_child(self, child):
+    child.parent = self
+    self.children[child.name] = child
+
+class File(Component):
+  def __init__(self, name, contents):
+    super().__init__(name)
+    self.contents = contents
+
+root = Folder('')
+def get_path(path):
+  names = path.split('/')[1:]
+  node = root
+  for name in names:
+    node = node.children[name]
+  print(node)
+  return node
+
+folder1 = Folder('folder1')
+folder2 = Folder('folder2')
+root.add_child(folder1)
+root.add_child(folder2)
+file111 = File('file111', 'contents')
+folder1.add_child(file111)
+#file111.copy('/folder1')

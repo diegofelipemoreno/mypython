@@ -140,7 +140,7 @@ class ScaleZip():
                         print("File: {}. {}".format(file, exception))
                     else:
                         im = image.load(full_path_file)
-                        scaled = scale(im, (640,480))
+                        scaled = scale(im, (640, 480))
                         image.save(scaled, full_path_file)
 
 
