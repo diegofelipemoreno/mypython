@@ -70,10 +70,10 @@ print("-"*30)
 # OBSERVER PATTERN (Push -> Poll way)
 
 # Observable
-class Workstation:
+class Observable:
   def __init__(self):
     self.observers = []
-    self.isRaining = False
+    self._product = None
 
   def add(self, observer):
     self.observers.append(observer)
@@ -81,44 +81,33 @@ class Workstation:
   def remove(self, observer):
     self.observers.remove(observer)
 
-  def notify(self):
+  @property
+  def product(self):
+    return self._product
+
+  @product.setter
+  def product(self, value):
+    self._product = value
+    self._update_observers()
+
+  def _update_observers(self):
     for observer in self.observers:
-      observer.update()
-
-  def get_state(self):
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    state_message = "Is Raining? {0}. At {1}:".format(self.isRaining, current_time)
+      observer()
     
-    return state_message
+class ConsoleObserver:
+  def __init__(self, observer):
+    self.observer = observer
+  def __call__(self):
+    print(self.observer.product)
 
-# Observer
-class PhoneDisplay:
-  def __init__(self, station):
-    self.station = station
-  
-  def update(self):
-    print("PhoneDisplay", self.station.get_state())
+i = Observable()
+c = ConsoleObserver(i)
+i.add(c)
 
-# Observer
-class TvDisplay:
-  def __init__(self, station):
-    self.station = station
-  
-  def update(self):
-    print("TvDisplay", self.station.get_state())
+i.product = "Widgest"
+i.product = "Widgests"
 
-ws = Workstation()
-pd = PhoneDisplay(ws)
-td = TvDisplay(ws)
-
-ws.add(pd)
-ws.add(td)
-ws.remove(td)
-
-ws.notify()
-ws.notify()
-
+print("x"*30)
 print("-"*30)
 
 # ITERATOR PATTERN: Way to access the elements to the algoritm object without caring about the type of structure.
@@ -407,12 +396,39 @@ class OneOnly:
     if not cls._singleton:
       cls._singleton = super(OneOnly, cls).__new__(cls, *args, **kwargs)
     return cls._singleton
+  def __init__(self):
+    self._is_game_over = False
+    self._snake_length = 2
+
+  @property
+  def is_game_over(self):
+      return self._is_game_over
+
+  @property
+  def snake_length(self):
+      return self._snake_length
+
+  @is_game_over.setter
+  def is_game_over(self, value):
+    self._is_game_over = value
+
+  @snake_length.setter
+  def snake_length(self, value):
+    self._snake_length = value
 
 o1 = OneOnly()
 o2 = OneOnly()
 
-print(o1 == o2)
+o1.snake_length = 19
+o2.is_game_over = True
 
+print(OneOnly().snake_length)
+
+print(o1 == o2)
+print(o1.__dict__, 'ccc')
+print(o2.__dict__, 'ddd')
+
+print("iii"*30)
 print("-"*30)
 
 
@@ -752,3 +768,81 @@ root.add_child(folder2)
 file111 = File('file111', 'contents')
 folder1.add_child(file111)
 #file111.copy('/folder1')
+
+print("-"*30)
+
+# COMMAND PATTERN
+# Encapusale a command as an object that comes from a invoker to a receiver,
+# also the command encapsulated supports the execute and unexecuted operations. DO - UNDO
+
+#(Receivers)
+class Window:
+  def exit(self):
+    sys.exit(0)
+
+class Document:
+  def __init__(self, filename):
+    self.filename = filename
+    self.contents = "This file cannot be modified"
+
+  def save(self):
+    with open(self.filename, "w") as file:
+      file.write(self.contents)
+
+
+#(Invokers)
+class ToolbarButton:
+  def __init__(self, name, iconname):
+    self.name = name
+    self.iconname = iconname
+
+  def click(self):
+    self.command.execute()
+
+class MenuItem:
+  def __init__(self, menu_name, menuitem_name):
+    self.menu = menu_name
+    self.item = menuitem_name
+
+  def click(self):
+    self.command.execute()
+
+class KeyboardShortcut:
+  def __init__(self, key, modifier):
+    self.key = key
+    self.modifier = modifier
+
+  def keypress(self):
+    self.command.execute()
+
+
+#(Commands)
+class SaveCommand:
+  def __init__(self, document):
+    self.document = document
+
+    def execute(self):
+      self.document.save()
+
+class ExitCommand:
+  def __init__(self, window):
+    self.window = window
+
+  def execute(self):
+    self.window.exit()
+
+
+window = Window()
+document = Document("a_document.txt")
+save = SaveCommand(document)
+exit = ExitCommand(window)
+
+save_button = ToolbarButton('save', 'save.png')
+save_button.command = save
+save_keystroke = KeyboardShortcut("s", "ctrl")
+save_keystroke.command = save
+exit_menu = MenuItem("File", "Exit")
+exit_menu.command = exit
+
+
+print("-"*30)
